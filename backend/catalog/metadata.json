@@ -1,0 +1,718 @@
+[
+  {
+    "uid": "fallback_person",
+    "name": "person",
+    "tags": [
+      "human",
+      "people",
+      "standing"
+    ],
+    "categories": [],
+    "description": "person human people standing",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bicycle",
+    "name": "bicycle",
+    "tags": [
+      "bike",
+      "cycling"
+    ],
+    "categories": [],
+    "description": "bicycle bike cycling",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_car",
+    "name": "car",
+    "tags": [
+      "vehicle",
+      "automobile"
+    ],
+    "categories": [],
+    "description": "car vehicle automobile",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_motorcycle",
+    "name": "motorcycle",
+    "tags": [
+      "motorbike",
+      "vehicle"
+    ],
+    "categories": [],
+    "description": "motorcycle motorbike vehicle",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_airplane",
+    "name": "airplane",
+    "tags": [
+      "aircraft",
+      "jet"
+    ],
+    "categories": [],
+    "description": "airplane aircraft jet",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bus",
+    "name": "bus",
+    "tags": [
+      "vehicle",
+      "transport"
+    ],
+    "categories": [],
+    "description": "bus vehicle transport",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_train",
+    "name": "train",
+    "tags": [
+      "vehicle",
+      "railway"
+    ],
+    "categories": [],
+    "description": "train vehicle railway",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_truck",
+    "name": "truck",
+    "tags": [
+      "vehicle",
+      "cargo"
+    ],
+    "categories": [],
+    "description": "truck vehicle cargo",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_boat",
+    "name": "boat",
+    "tags": [
+      "vessel",
+      "ship"
+    ],
+    "categories": [],
+    "description": "boat vessel ship",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_traffic_light",
+    "name": "traffic light",
+    "tags": [
+      "signal",
+      "road"
+    ],
+    "categories": [],
+    "description": "traffic light signal road",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_fire_hydrant",
+    "name": "fire hydrant",
+    "tags": [
+      "hydrant",
+      "street"
+    ],
+    "categories": [],
+    "description": "fire hydrant hydrant street",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_stop_sign",
+    "name": "stop sign",
+    "tags": [
+      "sign",
+      "road"
+    ],
+    "categories": [],
+    "description": "stop sign sign road",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bench",
+    "name": "bench",
+    "tags": [
+      "seat",
+      "park"
+    ],
+    "categories": [],
+    "description": "bench seat park",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bird",
+    "name": "bird",
+    "tags": [
+      "animal",
+      "flying"
+    ],
+    "categories": [],
+    "description": "bird animal flying",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_cat",
+    "name": "cat",
+    "tags": [
+      "animal",
+      "pet"
+    ],
+    "categories": [],
+    "description": "cat animal pet",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_dog",
+    "name": "dog",
+    "tags": [
+      "animal",
+      "pet"
+    ],
+    "categories": [],
+    "description": "dog animal pet",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_horse",
+    "name": "horse",
+    "tags": [
+      "animal",
+      "equine"
+    ],
+    "categories": [],
+    "description": "horse animal equine",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_sheep",
+    "name": "sheep",
+    "tags": [
+      "animal",
+      "farm"
+    ],
+    "categories": [],
+    "description": "sheep animal farm",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_cow",
+    "name": "cow",
+    "tags": [
+      "animal",
+      "farm"
+    ],
+    "categories": [],
+    "description": "cow animal farm",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_elephant",
+    "name": "elephant",
+    "tags": [
+      "animal",
+      "large"
+    ],
+    "categories": [],
+    "description": "elephant animal large",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bear",
+    "name": "bear",
+    "tags": [
+      "animal",
+      "wild"
+    ],
+    "categories": [],
+    "description": "bear animal wild",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_zebra",
+    "name": "zebra",
+    "tags": [
+      "animal",
+      "striped"
+    ],
+    "categories": [],
+    "description": "zebra animal striped",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_giraffe",
+    "name": "giraffe",
+    "tags": [
+      "animal",
+      "tall"
+    ],
+    "categories": [],
+    "description": "giraffe animal tall",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_backpack",
+    "name": "backpack",
+    "tags": [
+      "bag",
+      "travel"
+    ],
+    "categories": [],
+    "description": "backpack bag travel",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_umbrella",
+    "name": "umbrella",
+    "tags": [
+      "rain",
+      "canopy"
+    ],
+    "categories": [],
+    "description": "umbrella rain canopy",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_handbag",
+    "name": "handbag",
+    "tags": [
+      "bag",
+      "purse"
+    ],
+    "categories": [],
+    "description": "handbag bag purse",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_tie",
+    "name": "tie",
+    "tags": [
+      "necktie",
+      "clothing"
+    ],
+    "categories": [],
+    "description": "tie necktie clothing",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_suitcase",
+    "name": "suitcase",
+    "tags": [
+      "luggage",
+      "travel"
+    ],
+    "categories": [],
+    "description": "suitcase luggage travel",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bottle",
+    "name": "bottle",
+    "tags": [
+      "container",
+      "drink"
+    ],
+    "categories": [],
+    "description": "bottle container drink",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_cup",
+    "name": "cup",
+    "tags": [
+      "mug",
+      "drink"
+    ],
+    "categories": [],
+    "description": "cup mug drink",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bowl",
+    "name": "bowl",
+    "tags": [
+      "dish",
+      "food"
+    ],
+    "categories": [],
+    "description": "bowl dish food",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_chair",
+    "name": "chair",
+    "tags": [
+      "furniture",
+      "seat"
+    ],
+    "categories": [],
+    "description": "chair furniture seat",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_couch",
+    "name": "couch",
+    "tags": [
+      "sofa",
+      "furniture"
+    ],
+    "categories": [],
+    "description": "couch sofa furniture",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_bed",
+    "name": "bed",
+    "tags": [
+      "furniture",
+      "sleeping"
+    ],
+    "categories": [],
+    "description": "bed furniture sleeping",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_dining_table",
+    "name": "dining table",
+    "tags": [
+      "table",
+      "furniture"
+    ],
+    "categories": [],
+    "description": "dining table table furniture",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_toilet",
+    "name": "toilet",
+    "tags": [
+      "bathroom",
+      "plumbing"
+    ],
+    "categories": [],
+    "description": "toilet bathroom plumbing",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_television",
+    "name": "television",
+    "tags": [
+      "TV",
+      "screen"
+    ],
+    "categories": [],
+    "description": "television TV screen",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_laptop",
+    "name": "laptop",
+    "tags": [
+      "computer",
+      "portable"
+    ],
+    "categories": [],
+    "description": "laptop computer portable",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_keyboard",
+    "name": "keyboard",
+    "tags": [
+      "typing",
+      "keys"
+    ],
+    "categories": [],
+    "description": "keyboard typing keys",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_cell_phone",
+    "name": "cell phone",
+    "tags": [
+      "smartphone",
+      "mobile"
+    ],
+    "categories": [],
+    "description": "cell phone smartphone mobile",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_microwave",
+    "name": "microwave",
+    "tags": [
+      "kitchen",
+      "appliance"
+    ],
+    "categories": [],
+    "description": "microwave kitchen appliance",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_oven",
+    "name": "oven",
+    "tags": [
+      "kitchen",
+      "cooking"
+    ],
+    "categories": [],
+    "description": "oven kitchen cooking",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_refrigerator",
+    "name": "refrigerator",
+    "tags": [
+      "fridge",
+      "kitchen"
+    ],
+    "categories": [],
+    "description": "refrigerator fridge kitchen",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_book",
+    "name": "book",
+    "tags": [
+      "reading",
+      "pages"
+    ],
+    "categories": [],
+    "description": "book reading pages",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_clock",
+    "name": "clock",
+    "tags": [
+      "time",
+      "mechanical"
+    ],
+    "categories": [],
+    "description": "clock time mechanical",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_vase",
+    "name": "vase",
+    "tags": [
+      "container",
+      "flowers"
+    ],
+    "categories": [],
+    "description": "vase container flowers",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_scissors",
+    "name": "scissors",
+    "tags": [
+      "cutting",
+      "tool"
+    ],
+    "categories": [],
+    "description": "scissors cutting tool",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_teddy_bear",
+    "name": "teddy bear",
+    "tags": [
+      "toy",
+      "stuffed"
+    ],
+    "categories": [],
+    "description": "teddy bear toy stuffed",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_spider-man",
+    "name": "Spider-Man",
+    "tags": [
+      "superhero",
+      "marvel"
+    ],
+    "categories": [],
+    "description": "Spider-Man superhero marvel",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_batman",
+    "name": "Batman",
+    "tags": [
+      "superhero",
+      "dc"
+    ],
+    "categories": [],
+    "description": "Batman superhero dc",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_superman",
+    "name": "Superman",
+    "tags": [
+      "superhero",
+      "dc"
+    ],
+    "categories": [],
+    "description": "Superman superhero dc",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_iron_man",
+    "name": "Iron Man",
+    "tags": [
+      "superhero",
+      "marvel"
+    ],
+    "categories": [],
+    "description": "Iron Man superhero marvel",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_guitar",
+    "name": "guitar",
+    "tags": [
+      "instrument",
+      "music"
+    ],
+    "categories": [],
+    "description": "guitar instrument music",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_piano",
+    "name": "piano",
+    "tags": [
+      "instrument",
+      "music"
+    ],
+    "categories": [],
+    "description": "piano instrument music",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_lamp",
+    "name": "lamp",
+    "tags": [
+      "light",
+      "illumination"
+    ],
+    "categories": [],
+    "description": "lamp light illumination",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_robot",
+    "name": "robot",
+    "tags": [
+      "machine",
+      "android"
+    ],
+    "categories": [],
+    "description": "robot machine android",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_dragon",
+    "name": "dragon",
+    "tags": [
+      "fantasy",
+      "creature"
+    ],
+    "categories": [],
+    "description": "dragon fantasy creature",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_sword",
+    "name": "sword",
+    "tags": [
+      "weapon",
+      "blade"
+    ],
+    "categories": [],
+    "description": "sword weapon blade",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_tree",
+    "name": "tree",
+    "tags": [
+      "nature",
+      "plant"
+    ],
+    "categories": [],
+    "description": "tree nature plant",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_house",
+    "name": "house",
+    "tags": [
+      "building",
+      "home"
+    ],
+    "categories": [],
+    "description": "house building home",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_rocket",
+    "name": "rocket",
+    "tags": [
+      "space",
+      "vehicle"
+    ],
+    "categories": [],
+    "description": "rocket space vehicle",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_globe",
+    "name": "globe",
+    "tags": [
+      "earth",
+      "world"
+    ],
+    "categories": [],
+    "description": "globe earth world",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_crown",
+    "name": "crown",
+    "tags": [
+      "royalty",
+      "gold"
+    ],
+    "categories": [],
+    "description": "crown royalty gold",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_skull",
+    "name": "skull",
+    "tags": [
+      "bone",
+      "skeleton"
+    ],
+    "categories": [],
+    "description": "skull bone skeleton",
+    "is_fallback": true
+  },
+  {
+    "uid": "fallback_diamond",
+    "name": "diamond",
+    "tags": [
+      "gem",
+      "crystal"
+    ],
+    "categories": [],
+    "description": "diamond gem crystal",
+    "is_fallback": true
+  }
+]

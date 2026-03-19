@@ -1,0 +1,27 @@
+# Hologram Engine Backend - Dependencies
+# Core
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# AI/ML Models
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.3.0
+open-clip-torch>=2.29.0
+
+# Image Processing
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# 3D Model Retrieval
+objaverse>=0.1.7
+
+# Optional: TripoSR for 3D generation (install separately)
+# pip install git+https://github.com/VAST-AI-Research/TripoSR.git
+
+# Optional: Background removal for better 3D generation
+# rembg>=2.0.0
+
+# Production
+gunicorn>=22.0.0

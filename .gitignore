@@ -1,0 +1,32 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/app/__pycache__/
+backend/*.pyc
+backend/**/*.pyc
+*.pyc
+__pycache__/
+
+# AI Model weights (large files, downloaded at runtime)
+backend/models/
+*.pt
+*.pth
+*.ckpt
+
+# Generated output models
+backend/output/
+
+# Environment variables
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node (if used)
+node_modules/

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hologram Engine — Real-time AI-powered 3D hologram generation from any image or camera input">
+    <title>Hologram Engine — AI-Powered HUD</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='25' y='25' width='50' height='50' fill='none' stroke='%2300f0ff' stroke-width='8' transform='rotate(45 50 50)'/%3E%3Crect x='35' y='35' width='30' height='30' fill='rgba(0,240,255,0.6)' transform='rotate(-45 50 50)'/%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- New Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome for HUD icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background & FX -->
+    <canvas id="bg-particles"></canvas>
+    <div class="vignette"></div>
+
+    <!-- Header (Centered like Google) -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <div class="hologram-diamond"></div>
+            </div>
+            <div class="logo-text">
+                <h1>HOLOGRAM ENGINE</h1>
+                <span class="subtitle">AI-Powered 3D Generation System</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Left Panel: Input -->
+        <section class="panel input-panel" id="input-panel">
+            <div class="panel-header">
+                <i class="fas fa-satellite-dish panel-icon"></i>
+                <h2>DATA INPUT</h2>
+            </div>
+            
+            <div class="tab-switcher">
+                <button class="tab-btn active" data-tab="upload" id="tab-upload">
+                    <span>UPLOAD</span>
+                </button>
+                <button class="tab-btn" data-tab="camera" id="tab-camera">
+                    <span>CAMERA</span>
+                </button>
+                <button class="tab-btn" data-tab="prompt" id="tab-prompt">
+                    <span>PROMPT</span>
+                </button>
+            </div>
+
+            <div class="tab-content active" id="tab-content-upload">
+                <div class="upload-zone" id="upload-zone">
+                    <div class="upload-zone-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">DRAG IMAGE OR CLICK</p>
+                        <p class="upload-hint">SUPPORTED: JPG, PNG, WEBP</p>
+                    </div>
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                </div>
+                <div class="preview-container" id="preview-container" style="display: none;">
+                    <img id="preview-image" alt="Preview">
+                    <button class="clear-btn" id="clear-preview"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-content-camera">
+                <div class="camera-zone" id="camera-zone">
+                    <video id="camera-video" autoplay playsinline style="width:100%; height:100%; object-fit:cover; display:none; border-radius:10px;"></video>
+                    <button class="holo-ctrl-btn" id="btn-start-camera" style="margin:20px auto; display:block;">ACCESS CAMERA</button>
+                    <button class="holo-ctrl-btn" id="btn-take-photo" style="margin:20px auto; display:none;">CAPTURE FRAME</button>
+                    <canvas id="camera-canvas" style="display:none;"></canvas>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-content-prompt">
+                <div class="prompt-zone" style="padding: 20px; text-align: center;">
+                    <i class="fas fa-keyboard upload-icon" style="margin-bottom: 20px;"></i>
+                    <input type="text" id="text-prompt-input" placeholder="e.g. A futuristic car..." class="prompt-input" />
+                </div>
+            </div>
+
+            <button class="process-btn" id="process-btn" disabled>
+                <span class="btn-text">INITIALIZE HOLOGRAPHY</span>
+                <span class="btn-loading">
+                    <div class="spinner"></div> INITIALIZING...
+                </span>
+            </button>
+            
+            <!-- Hidden status indicator -->
+            <div class="status-indicator" id="server-status" style="margin-top: 20px; justify-content: center;">
+                <div class="status-dot"></div>
+                <span>CONNECTING...</span>
+            </div>
+        </section>
+
+        <!-- Center: 3D Hologram Viewport -->
+        <section class="panel hologram-panel" id="hologram-panel">
+            <div class="hologram-viewport" id="hologram-viewport">
+                <!-- HUD Brackets -->
+                <div class="viewport-bracket bracket-tl"></div>
+                <div class="viewport-bracket bracket-tr"></div>
+                <div class="viewport-bracket bracket-bl"></div>
+                <div class="viewport-bracket bracket-br"></div>
+                <!-- Grid & Overlay -->
+                <div class="viewport-grid"></div>
+                
+                <canvas id="hologram-canvas"></canvas>
+
+                <div class="hologram-placeholder" id="hologram-placeholder">
+                    <div class="placeholder-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                    <p>AWAITING DATA</p>
+                </div>
+
+                <div class="hologram-controls">
+                    <button class="holo-ctrl-btn" id="btn-fix-orientation" title="Fix Orientation"><i class="fas fa-arrows-alt-v"></i></button>
+                    <button class="holo-ctrl-btn" id="btn-reset-camera" title="Reset View"><i class="fas fa-crosshairs"></i></button>
+                    <button class="holo-ctrl-btn" id="btn-wireframe" title="Wireframe Mesh"><i class="fas fa-cube"></i></button>
+                    <button class="holo-ctrl-btn active" id="btn-auto-rotate" title="Rotate"><i class="fas fa-sync"></i></button>
+                    <button class="holo-ctrl-btn" id="btn-download" title="Export Model"><i class="fas fa-download"></i></button>
+                </div>
+
+                <!-- Clean Hologram Title (Moved from Right Panel) -->
+                <div class="viewport-hero-title">
+                    <h2 id="info-semantic-class"></h2>
+                    <p id="info-yolo-label"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Processing Overlay -->
+    <div class="processing-overlay" id="processing-overlay" style="display:none;">
+        <div class="processing-content">
+            <div class="scanner-container">
+                <i class="fas fa-fingerprint"></i>
+                <div class="scanner-line"></div>
+            </div>
+            <h3>PROCESSING ENTITY</h3>
+            <p>Initiating multi-stage AI pipeline...</p>
+            <div class="processing-tasks">
+                <div class="task active" id="task-detect"><i class="fas fa-circle-notch fa-spin"></i> CV Detection & Cropping</div>
+                <div class="task" id="task-semantic"><i class="fas fa-spinner"></i> Semantic Classification</div>
+                <div class="task" id="task-retrieval"><i class="fas fa-spinner"></i> 3D Mesh Retrieval</div>
+                <div class="task" id="task-hologram"><i class="fas fa-spinner"></i> Render Hologram</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="js/hologram.js?v=7"></script>
+    <script type="module" src="js/api.js?v=7"></script>
+    <script type="module" src="js/app.js?v=7"></script>
+</body>
+</html>
