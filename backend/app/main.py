@@ -291,74 +291,59 @@ async def process_prompt_pipeline(req: PromptRequest):
     heavy CLIP embeddings. This keeps memory under 512MB for free tier.
     """
     try:
+        from .semantic import get_text_embedding
+        from .retrieval import retrieve_model, download_objaverse_model
+        
         prompt = req.prompt.strip().lower()
         if not prompt:
             raise HTTPException(status_code=400, detail="Empty prompt")
 
         start_time = time.time()
 
-        # ── Direct text matching against our 65-object catalog ──
-        catalog_path = os.path.join(
-            os.path.dirname(__file__), "..", "catalog", "metadata.json"
-        )
-        catalog_path = os.path.normpath(catalog_path)
+        # ── Step 1: Full Semantic Embedding (CLIP) ──
+        text_embedding = get_text_embedding(prompt)
 
-        best_match = None
-        best_score = 0.0
+        # ── Step 2: Objaverse / High-Accuracy Catalog Retrieval ──
+        match = retrieve_model(text_embedding, query_text=prompt)
 
-        if os.path.exists(catalog_path):
-            import json as json_mod
-            with open(catalog_path, "r") as f:
-                catalog = json_mod.load(f)
-
-            for entry in catalog:
-                name = entry.get("name", "").lower()
-                tags = [t.lower() for t in entry.get("tags", [])]
-                desc = entry.get("description", "").lower()
-
-                score = 0.0
-                if prompt == name:
-                    score = 1.0
-                elif prompt in name or name in prompt:
-                    score = 0.8
-                elif any(prompt == tag for tag in tags):
-                    score = 0.7
-                elif any(prompt in tag or tag in prompt for tag in tags):
-                    score = 0.5
-                elif prompt in desc:
-                    score = 0.4
-
-                if score > best_score:
-                    best_score = score
-                    best_match = entry
-
-        if not best_match or best_score < 0.3:
+        if not match or match.get("similarity", 0) < 0.3:
             raise HTTPException(
                 status_code=404,
-                detail=f"No 3D model found for '{prompt}'. Try: car, dog, cat, robot, guitar, chair, laptop, sword, dragon, rocket, etc."
+                detail=f"No high-accuracy 3D match found for '{prompt}'."
             )
 
-        elapsed = round(time.time() - start_time, 3)
+        model_url = None
+        model_method = "none"
 
-        # Generate a lightweight procedural GLB so the frontend actually has a real model file
-        from .generation import generate_procedural_glb_from_label
-        gen_result = generate_procedural_glb_from_label(best_match["name"])
-        model_url = f"/models/{gen_result['model_filename']}"
+        # Check if it hit an actual Objaverse model
+        if match.get("is_objaverse"):
+            model_path = download_objaverse_model(match["uid"])
+            if model_path:
+                model_url = f"/models/{os.path.basename(model_path)}"
+                model_method = "objaverse"
+        else:
+            # Fallback catalog matched — generate rich procedural model
+            from .generation import generate_procedural_glb_from_label
+            gen_result = generate_procedural_glb_from_label(match["name"])
+            model_url = f"/models/{gen_result['model_filename']}"
+            model_method = "procedural"
+
+        elapsed = round(time.time() - start_time, 3)
 
         return {
             "success": True,
             "detection": {
                 "yolo_label": prompt,
                 "confidence": 1.0,
-                "semantic_class": best_match["name"].upper(),
-                "semantic_confidence": best_score,
-                "semantic_source": "text_match"
+                "semantic_class": match["name"].upper(),
+                "semantic_confidence": match["similarity"],
+                "semantic_source": "clip_semantic"
             },
             "model": {
                 "url": model_url,
-                "method": "procedural_backend",
-                "match_name": best_match["name"],
-                "match_similarity": best_score
+                "method": model_method,
+                "match_name": match["name"],
+                "match_similarity": match["similarity"]
             },
             "processing_time_seconds": elapsed
         }

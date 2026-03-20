@@ -318,10 +318,9 @@ def load_catalog():
     else:
         _build_fallback_catalog()
 
-    # NOTE: Objaverse loading disabled to stay within 512MB RAM on free tier.
-    # The fallback CLIP-embedding catalog provides instant retrieval for common objects.
-    # To enable Objaverse, uncomment the next line on a higher-RAM instance:
-    # start_objaverse_loading()
+    # User explicitly requested full accuracy on deployment, identical to local.
+    # Enabling background Objaverse loading to fetch real 3D models.
+    start_objaverse_loading()
 
 
 # ═══════════════════════════════════════════════════════════
