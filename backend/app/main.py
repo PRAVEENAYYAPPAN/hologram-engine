@@ -340,6 +340,11 @@ async def process_prompt_pipeline(req: PromptRequest):
 
         elapsed = round(time.time() - start_time, 3)
 
+        # Generate a lightweight procedural GLB so the frontend actually has a real model file
+        from .generation import generate_procedural_glb_from_label
+        gen_result = generate_procedural_glb_from_label(best_match["name"])
+        model_url = f"/models/{gen_result['model_filename']}"
+
         return {
             "success": True,
             "detection": {
@@ -350,8 +355,8 @@ async def process_prompt_pipeline(req: PromptRequest):
                 "semantic_source": "text_match"
             },
             "model": {
-                "url": None,
-                "method": "text_match",
+                "url": model_url,
+                "method": "procedural_backend",
                 "match_name": best_match["name"],
                 "match_similarity": best_score
             },

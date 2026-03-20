@@ -139,6 +139,32 @@ def _generate_procedural_glb(image: Image.Image, output_path: str, label: str) -
         "success": True,
     }
 
+def generate_procedural_glb_from_label(label: str, color: list[float] = [0.0, 0.8, 1.0]) -> dict:
+    """
+    Generate a procedural GLB file directly from a label (without an image).
+    Used by the prompt pipeline to ensure a 3D model is always returned.
+    """
+    model_id = str(uuid.uuid4())[:8]
+    safe_label = label.lower().replace(" ", "_").replace("-", "_")
+    output_filename = f"{safe_label}_{model_id}.glb"
+    output_path = os.path.join(OUTPUT_DIR, output_filename)
+
+    # Get object-specific geometry
+    vertices, indices, normals = _get_geometry_for_label(label)
+
+    # Build GLB binary
+    glb_bytes = _build_glb(vertices, indices, normals, color)
+
+    with open(output_path, "wb") as f:
+        f.write(glb_bytes)
+
+    return {
+        "model_path": output_path,
+        "model_filename": os.path.basename(output_path),
+        "method": "procedural",
+        "success": True,
+    }
+
 
 def _get_dominant_color(image: Image.Image) -> list[float]:
     """Extract dominant color from the image using k-means-like approach."""
