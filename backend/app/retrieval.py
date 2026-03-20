@@ -29,7 +29,7 @@ from .config import (
     RETRIEVAL_SIMILARITY_THRESHOLD,
     RETRIEVAL_TOP_K,
 )
-from .semantic import get_text_embedding
+# NOTE: semantic import is lazy to avoid loading torch/open_clip at startup
 
 # ═══════════════════════════════════════════════════════════
 # OBJAVERSE STATE

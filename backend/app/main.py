@@ -21,14 +21,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .config import API_HOST, API_PORT, CORS_ORIGINS, OUTPUT_DIR
-from .detection import detect_objects, crop_detection
-from .semantic import (
-    classify_semantic,
-    get_image_embedding_from_bytes,
-    get_image_embedding,
-)
-from .retrieval import retrieve_model, load_catalog, download_objaverse_model
-from .generation import generate_3d_model
+
+# NOTE: Heavy AI modules (detection, semantic, generation) are imported lazily
+# inside their endpoint functions to prevent loading torch/CLIP at startup.
+# This keeps startup memory under 512MB on Render's free tier.
+# Only retrieval's load_catalog (which reads a small JSON) is imported here.
+from .retrieval import load_catalog
 
 from PIL import Image
 
@@ -84,6 +82,9 @@ async def detect(file: UploadFile = File(...)):
     - Ambiguous YOLO labels (person) are refined by CLIP.
     """
     try:
+        from .detection import detect_objects, crop_detection
+        from .semantic import classify_semantic, get_image_embedding_from_bytes, get_image_embedding
+
         image_bytes = await file.read()
         if not image_bytes:
             raise HTTPException(status_code=400, detail="Empty file")
@@ -163,6 +164,8 @@ async def retrieve_model_endpoint(
     try:
         import json
         import numpy as np
+        from .semantic import get_image_embedding_from_bytes
+        from .retrieval import retrieve_model, download_objaverse_model
 
         start_time = time.time()
         query_embedding = None
@@ -232,6 +235,8 @@ async def generate_model_endpoint(
 ):
     """Generate a 3D model from an uploaded image."""
     try:
+        from .generation import generate_3d_model
+
         image_bytes = await file.read()
         if not image_bytes:
             raise HTTPException(status_code=400, detail="Empty file")
@@ -373,6 +378,11 @@ async def full_pipeline(file: UploadFile = File(...)):
     3. The FINAL label drives both retrieval and generation.
     """
     try:
+        from .detection import detect_objects, crop_detection
+        from .semantic import classify_semantic, get_image_embedding_from_bytes, get_image_embedding
+        from .retrieval import retrieve_model, download_objaverse_model
+        from .generation import generate_3d_model
+
         image_bytes = await file.read()
         if not image_bytes:
             raise HTTPException(status_code=400, detail="Empty file")
