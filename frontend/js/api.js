@@ -4,8 +4,8 @@
  * Handles all communication with the Hologram Engine backend API.
  */
 
-// Backend API base URL — change for production
-const API_BASE = window.HOLOGRAM_API_BASE || 'http://localhost:8000';
+// Backend API base URL — production Render backend
+const API_BASE = window.HOLOGRAM_API_BASE || 'https://hologram-engine.onrender.com';
 
 /**
  * Check if the backend server is reachable.
