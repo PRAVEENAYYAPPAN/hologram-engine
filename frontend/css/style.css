@@ -502,3 +502,123 @@ body {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Full overhaul for phones & tablets
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    /* Allow vertical scrolling on mobile */
+    body {
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    /* Compact header */
+    .header {
+        height: 56px;
+        padding: 0 15px;
+        clip-path: none;
+    }
+    .logo-text h1 {
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+    .logo-text .subtitle {
+        font-size: 0.6rem;
+        letter-spacing: 1px;
+    }
+    .logo-icon { width: 30px; height: 30px; }
+
+    /* Stack the main grid vertically */
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px;
+        max-width: 100%;
+    }
+
+    /* Make 3D viewport appear FIRST on mobile (above input panel) */
+    .viewport-panel {
+        order: -1;
+        height: 55vw;
+        min-height: 260px;
+        max-height: 380px;
+    }
+
+    /* Input panel full width */
+    .input-panel {
+        min-height: auto;
+    }
+
+    /* Tab buttons — larger touch targets */
+    .tab-btn {
+        padding: 8px 14px;
+        font-size: 0.72rem;
+    }
+
+    /* Upload zone compact */
+    .upload-zone {
+        padding: 25px 15px;
+        min-height: 180px;
+    }
+    .upload-icon { font-size: 2.5rem; }
+    .upload-zone p { font-size: 1rem; }
+
+    /* Camera zone compact */
+    .camera-zone { height: 220px; }
+
+    /* Process button full width */
+    .process-btn {
+        padding: 14px;
+        font-size: 0.9rem;
+    }
+
+    /* HUD controls row — wrap buttons */
+    .hud-controls {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px;
+    }
+    .hud-ctrl-btn {
+        width: 36px; height: 36px;
+        font-size: 0.8rem;
+    }
+
+    /* Hero title size */
+    .viewport-hero-title h2 {
+        font-size: 2rem;
+        letter-spacing: 6px;
+    }
+    .viewport-hero-title p {
+        font-size: 0.9rem;
+        letter-spacing: 3px;
+    }
+
+    /* Processing overlay content */
+    .processing-content {
+        width: 90vw;
+        padding: 25px 15px;
+    }
+    .scanner-container { width: 100px; height: 100px; }
+    .scanner-container i { font-size: 2rem; }
+    .processing-content h3 { font-size: 1rem; }
+
+    /* Status indicator in panel footer */
+    .status-indicator {
+        font-size: 0.7rem;
+        padding: 8px 12px;
+    }
+
+    /* Panel header compact */
+    .panel-header { padding: 10px 15px; }
+    .panel-header h2 { font-size: 0.8rem; }
+}
+
+@media (max-width: 400px) {
+    .logo-text h1 { font-size: 0.85rem; letter-spacing: 1px; }
+    .logo-text .subtitle { display: none; }
+    .tab-btn { padding: 6px 10px; font-size: 0.65rem; }
+    .viewport-panel { height: 60vw; min-height: 220px; }
+}
