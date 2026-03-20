@@ -13,9 +13,10 @@ const API_BASE = window.HOLOGRAM_API_BASE || 'https://hologram-engine.onrender.c
  */
 export async function checkHealth() {
     try {
+        // Render free tier can take up to 60s to wake from cold start
         const response = await fetch(`${API_BASE}/health`, {
             method: 'GET',
-            signal: AbortSignal.timeout(5000),
+            signal: AbortSignal.timeout(60000),
         });
         const data = await response.json();
         return data.status === 'ok';

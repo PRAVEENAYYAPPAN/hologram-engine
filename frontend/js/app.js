@@ -89,13 +89,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─── Health Check ───────────────────────────────────────
+let _wasOffline = false;
 async function checkServerHealth() {
+    // Show "waking up" state if previously offline (Render free tier cold start)
+    if (_wasOffline) {
+        serverStatus.querySelector('.status-dot').style.background = '#ffaa00';
+        serverStatus.querySelector('.status-dot').style.boxShadow = '0 0 10px #ffaa00';
+        serverStatus.querySelector('span').textContent = 'WAKING UP...';
+        serverStatus.style.color = '#ffaa00';
+        serverStatus.style.borderColor = 'rgba(255, 170, 0, 0.3)';
+    }
+
     const healthy = await API.checkHealth();
+    _wasOffline = !healthy;
+
     serverStatus.querySelector('.status-dot').style.background = healthy ? '#00ff88' : '#ff0055';
     serverStatus.querySelector('.status-dot').style.boxShadow = healthy ? '0 0 10px #00ff88' : '0 0 10px #ff0055';
     serverStatus.querySelector('span').textContent = healthy ? 'SYS.ONLINE' : 'SYS.OFFLINE';
     serverStatus.style.color = healthy ? '#00ff88' : '#ff0055';
     serverStatus.style.borderColor = healthy ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 0, 85, 0.3)';
+
+    // If offline, retry sooner (10s) to catch the cold start wake-up
+    if (!healthy) {
+        setTimeout(checkServerHealth, 10000);
+    }
 }
 
 // ─── Hologram Renderer ─────────────────────────────────
