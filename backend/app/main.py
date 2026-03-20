@@ -279,47 +279,82 @@ class PromptRequest(BaseModel):
 
 @app.post("/prompt_pipeline")
 async def process_prompt_pipeline(req: PromptRequest):
-    """End-to-end pipeline taking a pure text prompt and returning a 3D hologram asset."""
-    import time
+    """
+    Lightweight text-prompt → 3D model pipeline.
+    
+    Uses direct text matching against the fallback catalog instead of
+    heavy CLIP embeddings. This keeps memory under 512MB for free tier.
+    """
     try:
-        from .semantic import get_text_embedding_single
-        prompt = req.prompt.strip()
-        
-        # 1. Embed text
-        embedding = get_text_embedding_single(prompt)
-        
-        # 2. Retrieve model
-        match = retrieve_model(embedding, prompt.lower())
-        
-        model_url = None
-        model_method = "text_search"
-        if match:
-            model_path = download_objaverse_model(match["uid"])
-            if model_path:
-                model_url = f"/models/{os.path.basename(model_path)}"
-                model_method = "objaverse"
-                
-        if not model_url:
-            raise HTTPException(status_code=404, detail=f"No 3D model found for '{prompt}'")
-            
+        prompt = req.prompt.strip().lower()
+        if not prompt:
+            raise HTTPException(status_code=400, detail="Empty prompt")
+
+        start_time = time.time()
+
+        # ── Direct text matching against our 65-object catalog ──
+        catalog_path = os.path.join(
+            os.path.dirname(__file__), "..", "catalog", "metadata.json"
+        )
+        catalog_path = os.path.normpath(catalog_path)
+
+        best_match = None
+        best_score = 0.0
+
+        if os.path.exists(catalog_path):
+            import json as json_mod
+            with open(catalog_path, "r") as f:
+                catalog = json_mod.load(f)
+
+            for entry in catalog:
+                name = entry.get("name", "").lower()
+                tags = [t.lower() for t in entry.get("tags", [])]
+                desc = entry.get("description", "").lower()
+
+                score = 0.0
+                if prompt == name:
+                    score = 1.0
+                elif prompt in name or name in prompt:
+                    score = 0.8
+                elif any(prompt == tag for tag in tags):
+                    score = 0.7
+                elif any(prompt in tag or tag in prompt for tag in tags):
+                    score = 0.5
+                elif prompt in desc:
+                    score = 0.4
+
+                if score > best_score:
+                    best_score = score
+                    best_match = entry
+
+        if not best_match or best_score < 0.3:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No 3D model found for '{prompt}'. Try: car, dog, cat, robot, guitar, chair, laptop, sword, dragon, rocket, etc."
+            )
+
+        elapsed = round(time.time() - start_time, 3)
+
         return {
             "success": True,
             "detection": {
                 "yolo_label": prompt,
                 "confidence": 1.0,
-                "semantic_class": prompt.upper(),
-                "semantic_confidence": match["similarity"] if match else 1.0,
-                "semantic_source": "text_prompt"
+                "semantic_class": best_match["name"].upper(),
+                "semantic_confidence": best_score,
+                "semantic_source": "text_match"
             },
             "model": {
-                "url": model_url,
-                "method": model_method,
-                "match_name": match["name"] if match else prompt,
-                "match_similarity": match["similarity"] if match else 1.0
-            }
+                "url": None,
+                "method": "text_match",
+                "match_name": best_match["name"],
+                "match_similarity": best_score
+            },
+            "processing_time_seconds": elapsed
         }
+    except HTTPException:
+        raise
     except Exception as e:
-        import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Prompt Pipeline failed: {str(e)}")
 
