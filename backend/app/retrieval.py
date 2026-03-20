@@ -301,7 +301,7 @@ def _build_fallback_catalog():
 # ═══════════════════════════════════════════════════════════
 
 def load_catalog():
-    """Load or build the catalog, and start Objaverse loading in background."""
+    """Load or build the catalog. Objaverse loading is disabled on free tier to save RAM."""
     global _catalog_embeddings, _catalog_metadata
 
     if _catalog_embeddings is not None:
@@ -318,8 +318,10 @@ def load_catalog():
     else:
         _build_fallback_catalog()
 
-    # Start loading Objaverse in background (for real model downloads)
-    start_objaverse_loading()
+    # NOTE: Objaverse loading disabled to stay within 512MB RAM on free tier.
+    # The fallback CLIP-embedding catalog provides instant retrieval for common objects.
+    # To enable Objaverse, uncomment the next line on a higher-RAM instance:
+    # start_objaverse_loading()
 
 
 # ═══════════════════════════════════════════════════════════
