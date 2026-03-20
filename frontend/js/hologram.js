@@ -438,6 +438,132 @@ export function clearModel() {
 }
 
 // ════════════════════════════════════════════════════════
+// PROCEDURAL HOLOGRAM GENERATION (No GLB needed)
+// ════════════════════════════════════════════════════════
+
+const SHAPE_MAP = {
+    // Vehicles
+    car: 'box', truck: 'box', bus: 'box', train: 'box',
+    // Animals
+    dog: 'sphere', cat: 'sphere', bird: 'cone', fish: 'torus',
+    horse: 'sphere', elephant: 'sphere', bear: 'sphere',
+    // Tech
+    laptop: 'box', phone: 'box', tv: 'box', keyboard: 'box',
+    // Weapons / tools
+    sword: 'cylinder', knife: 'cylinder', axe: 'cylinder',
+    // Nature
+    tree: 'cone', flower: 'torus', mushroom: 'cone',
+    // Furniture
+    chair: 'box', table: 'box', bed: 'box', couch: 'box',
+    // Round objects
+    ball: 'sphere', globe: 'sphere', planet: 'sphere', apple: 'sphere',
+    // Fantasy
+    dragon: 'icosahedron', robot: 'dodecahedron', rocket: 'cone',
+    // Music
+    guitar: 'cylinder', drum: 'cylinder',
+    // Books / flat
+    book: 'box',
+};
+
+export function generateProcedural(label) {
+    clearModel();
+
+    const group = new THREE.Group();
+    const name = label.toLowerCase().trim();
+    const shapeType = SHAPE_MAP[name] || 'icosahedron';
+
+    // ── Primary shape ──
+    let geometry;
+    switch (shapeType) {
+        case 'box':
+            geometry = new THREE.BoxGeometry(1.2, 0.8, 1.0, 4, 4, 4);
+            break;
+        case 'sphere':
+            geometry = new THREE.SphereGeometry(0.7, 32, 32);
+            break;
+        case 'cone':
+            geometry = new THREE.ConeGeometry(0.6, 1.4, 32);
+            break;
+        case 'cylinder':
+            geometry = new THREE.CylinderGeometry(0.15, 0.15, 1.6, 32);
+            break;
+        case 'torus':
+            geometry = new THREE.TorusGeometry(0.5, 0.2, 16, 48);
+            break;
+        case 'dodecahedron':
+            geometry = new THREE.DodecahedronGeometry(0.7, 0);
+            break;
+        case 'icosahedron':
+        default:
+            geometry = new THREE.IcosahedronGeometry(0.7, 1);
+            break;
+    }
+
+    // Main holographic mesh
+    const mainMat = createHolographicMaterial(null, new THREE.Color(0x00ddff), false);
+    const mesh = new THREE.Mesh(geometry, mainMat);
+    mesh.position.y = 1.0;
+    group.add(mesh);
+
+    // Wireframe overlay
+    const edges = new THREE.EdgesGeometry(geometry, 15);
+    const wireMat = createWireframeMaterial();
+    const wireframe = new THREE.LineSegments(edges, wireMat);
+    mesh.add(wireframe);
+
+    // ── Orbiting rings ──
+    for (let i = 0; i < 3; i++) {
+        const ringGeo = new THREE.TorusGeometry(0.9 + i * 0.2, 0.008, 8, 64);
+        const ringMat = new THREE.MeshBasicMaterial({
+            color: i === 0 ? 0x00f0ff : i === 1 ? 0x0088ff : 0x00ffaa,
+            transparent: true, opacity: 0.4 - i * 0.08,
+            side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false,
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.position.y = 1.0;
+        ring.rotation.x = Math.PI / 2 + (i - 1) * 0.4;
+        ring.rotation.z = i * 0.6;
+        ring.userData._orbitIndex = i;
+        group.add(ring);
+    }
+
+    // ── Floating data particles around shape ──
+    const pCount = 200;
+    const pPositions = new Float32Array(pCount * 3);
+    const pColors = new Float32Array(pCount * 3);
+    const c1 = new THREE.Color(0x00f0ff);
+    const c2 = new THREE.Color(0x00ffaa);
+    for (let i = 0; i < pCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = 0.8 + Math.random() * 0.6;
+        pPositions[i * 3] = Math.cos(angle) * r;
+        pPositions[i * 3 + 1] = 0.3 + Math.random() * 1.5;
+        pPositions[i * 3 + 2] = Math.sin(angle) * r;
+        const c = Math.random() > 0.5 ? c1 : c2;
+        pColors[i * 3] = c.r; pColors[i * 3 + 1] = c.g; pColors[i * 3 + 2] = c.b;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+    pGeo.setAttribute('color', new THREE.BufferAttribute(pColors, 3));
+    const pMat = new THREE.PointsMaterial({
+        size: 0.03, vertexColors: true, transparent: true, opacity: 0.6,
+        blending: THREE.AdditiveBlending, depthWrite: false,
+    });
+    group.add(new THREE.Points(pGeo, pMat));
+
+    // Store animation reference
+    group.userData._proceduralMesh = mesh;
+    group.userData._isProceduralHologram = true;
+
+    currentModel = group;
+    holoGroup.add(group);
+
+    controls.target.set(0, 1.0, 0);
+    camera.position.set(0, 1.2, 3);
+    controls.update();
+}
+
+// ════════════════════════════════════════════════════════
 // RENDER LOOP
 // ════════════════════════════════════════════════════════
 
@@ -454,6 +580,23 @@ function animate() {
                 child.material.uniforms.time.value = elapsed;
             }
         });
+
+        // Animate procedural elements if this is a procedural hologram
+        if (currentModel.userData._isProceduralHologram) {
+            currentModel.children.forEach(child => {
+                // Orbiting rings
+                if (child.userData._orbitIndex !== undefined) {
+                    child.rotation.x += delta * (0.2 + child.userData._orbitIndex * 0.1);
+                    child.rotation.y += delta * 0.15;
+                }
+            });
+            // Float the main mesh slightly
+            if (currentModel.userData._proceduralMesh) {
+                currentModel.userData._proceduralMesh.position.y = 1.0 + Math.sin(elapsed * 2.0) * 0.05;
+                currentModel.userData._proceduralMesh.rotation.y += delta * 0.5;
+                currentModel.userData._proceduralMesh.rotation.z += delta * 0.2;
+            }
+        }
     }
 
     if (particleSystem) {

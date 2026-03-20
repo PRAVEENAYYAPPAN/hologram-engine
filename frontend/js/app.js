@@ -289,6 +289,11 @@ async function runDetectionPipeline() {
             lastModelUrl = modelUrl;
             await Hologram.loadModel(modelUrl);
             holoPlaceholder.style.display = 'none';
+        } else {
+            // No GLB available — generate procedural hologram
+            const label = result.detection?.semantic_class || result.model?.match_name || 'object';
+            Hologram.generateProcedural(label);
+            holoPlaceholder.style.display = 'none';
         }
 
         updateProcessingTask('task-hologram', 'done');
